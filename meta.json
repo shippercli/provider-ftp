@@ -1,0 +1,18 @@
+{
+  "name": "FTP / FTPS",
+  "slug": "ftp",
+  "logo": "logo.svg",
+  "darkLogo": "logo.svg",
+  "status": "beta",
+  "statusNote": "Tested with disposable FTP and explicit FTPS servers. Hosting-specific compatibility may vary; requires MLSD and overwrite-by-rename support.",
+  "description": "Deploy prebuilt files to FTP and certificate-verified FTPS servers with tracked cleanup and retryable deployment journals.",
+  "features": ["File Deployment", "Verified FTPS", "Profiles", "Deployment Status", "Safe Cleanup"],
+  "config": {
+    "provider": "ftp",
+    "host": "ftp.example.com",
+    "protocol": "ftps",
+    "username": "${FTP_USERNAME}",
+    "password": "${FTP_PASSWORD}"
+  },
+  "install": "composer config repositories.shipper-ftp git https://github.com/shippercli/provider-ftp.git\ncomposer require 'shippercli/cli:^1.0.10' 'shippercli/provider-ftp:^1.0'"
+}

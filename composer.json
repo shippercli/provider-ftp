@@ -1,0 +1,18 @@
+{
+    "name": "shippercli/provider-ftp",
+    "description": "FTP and certificate-verified FTPS deployment provider for Shipper CLI",
+    "type": "shipper-plugin",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "ext-curl": "*",
+        "shippercli/contracts": "^1.2"
+    },
+    "require-dev": {"phpunit/phpunit": "^11.5"},
+    "autoload": {"psr-4": {"ShipperCli\\ProviderFtp\\": "src/"}},
+    "autoload-dev": {"psr-4": {"ShipperCli\\ProviderFtp\\Tests\\": "tests/"}},
+    "scripts": {"test": "php vendor/bin/phpunit"},
+    "extra": {"shipper-plugin": "ShipperCli\\ProviderFtp\\FtpPlugin"},
+    "config": {"platform": {"php": "8.3.0"}, "sort-packages": true},
+    "archive": {"exclude": ["/vendor", "/tests", "/.github", "/.venv", "/.env*", "/auth.json", "/.phpunit*", "/phpunit.xml", "/composer.lock"]}
+}

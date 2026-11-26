@@ -1,0 +1,43 @@
+name: CI
+permissions:
+  contents: read
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  tests:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.3', '8.4', '8.5']
+    steps:
+      - uses: actions/checkout@v6
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '${{ matrix.php }}'
+          extensions: curl, mbstring, dom, xml, xmlwriter
+          tools: composer:v2
+          coverage: none
+      - run: composer validate --strict
+      - run: composer install --prefer-dist --no-progress --no-interaction
+      - run: composer dump-autoload --optimize --strict-psr
+      - run: composer test
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install -r tests/integration/requirements.txt
+      - run: python tests/integration/run.py
+      - name: Verify released CLI integration
+        if: matrix.php == '8.3'
+        run: python tests/cli_install.py
+      - run: composer audit --locked --no-interaction
+      - name: Check distributable package
+        run: |
+          mkdir -p /tmp/shipper-ftp-dist
+          composer archive --format=zip --dir=/tmp/shipper-ftp-dist
+          python tests/verify_dist.py /tmp/shipper-ftp-dist/*.zip
